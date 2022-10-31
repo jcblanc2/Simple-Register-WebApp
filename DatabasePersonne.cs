@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -10,9 +11,15 @@ namespace devoir_3
 {
     public static class DatabasePersonne
     {
-        private static string LoadConnectionString(String id="Default")
+        private static string LoadConnectionString()
         {
-            return ConfigurationManager.ConnectionStrings[id].ConnectionString;
+            string codeBase = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+            UriBuilder uri = new UriBuilder(codeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+            string databasePath = Path.GetDirectoryName(path) + "/personnes.db";
+
+            String connectionStrings = $"Data Source={databasePath};Version=3";
+            return connectionStrings;
         }
 
 
